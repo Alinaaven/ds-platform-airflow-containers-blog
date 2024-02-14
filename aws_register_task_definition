@@ -1,0 +1,24 @@
+aws ecs register-task-definition \
+    --family my-task-definition \
+    --network-mode awsvpc \
+    --execution-role-arn arn:aws:iam::MY_ACCOUNT:role/ecsExecutionRole \
+    --container-definitions '[{
+        "name": "my-app",
+        "image": "my-app-image",
+        "essential": true,
+        "portMappings": [
+            {
+                "containerPort": 80,
+                "hostPort": 80
+            }
+        ],
+        "environment": [
+            {
+                "name": "ENV_VAR_NAME",
+                "value": "value"
+            }
+        ]
+    }]' \
+    --requires-compatibilities FARGATE \
+    --cpu "256" \
+    --memory "512"
