@@ -6,8 +6,6 @@ Project Structure
 dags/ - Contains Airflow DAG files for ECS tasks execution.
 cdk/ - AWS CDK scripts for provisioning ECS clusters and related resources.
 pipelines/ - Azure Pipeline YAML configuration for CI/CD processes.
-Dockerfile - Docker configuration file for building the application image.
-requirements.txt - Python dependencies for the Airflow environment.
 
 Prerequisites
 AWS Account and CLI configured with necessary permissions.
@@ -24,15 +22,13 @@ cdk deploy
 
 2. Task Definition Creation with AWS CLI
 Create a new ECS task definition with the necessary configurations:
+Run the command in the aws_register_task_definition file.
 
-aws ecs register-task-definition --cli-input-json file://path_to_task_definition.json
 
-Replace path_to_task_definition.json with the path to your task definition JSON file.
-
-3. Airflow DAG Configuration
+4. Airflow DAG Configuration
 Place your DAG files in the Airflow dags/ directory. Ensure your DAG utilizes the EcsRunTaskOperator with parameters specified in external parameter files or environment variables.
 
-4. Building and Pushing Docker Images with Azure Pipeline
+5. Building and Pushing Docker Images with Azure Pipeline
 The Azure Pipeline defined in pipelines/azure-pipeline.yml automates the process of building the Docker image, running tests, and pushing the image to AWS Elastic Container Registry (ECR).
 
 Configure the pipeline in your Azure DevOps project and link it to your repository.
@@ -41,7 +37,6 @@ Azure Pipeline Configuration
 The pipeline uses the following stages:
 
 Build: Builds the Docker image based on the Dockerfile.
-Test: Runs any tests you have defined.
 Push: Pushes the built image to AWS ECR.
 Make sure to replace placeholders in the azure-pipeline.yml with your actual AWS ECR repository URI and credentials.
 
