@@ -1,29 +1,22 @@
 import datetime, os, json
 
-from airflow.decorators import dag, task
 from airflow.models import Variable
+from airflow.decorators import dag, task
 from airflow.operators.python import get_current_context
 from airflow.providers.amazon.aws.operators.ecs import EcsRunTaskOperator
 
-
 DAG_NAME = "ecs_demo_dag"
-
 dag_path = os.path.dirname(os.path.abspath(__file__))
-
 dag_vars = (Variable.get(key='environment_variables_demo', default_var=dict(), deserialize_json=True))
 
-
 default_args = {
-    'owner': 'my_name',
     'depends_on_past': False,
     'start_date': datetime.datetime(2023, 1, 1)
 }
 
-
 @dag(default_args=default_args, schedule_interval=None, max_active_runs=1, catchup=False)
 
 def run_demo_ecs():
-
     @task
     def get_input_data():
         dag_path = os.path.dirname(os.path.abspath(__file__))
@@ -67,8 +60,6 @@ def run_demo_ecs():
     input_data_extractions_instance=get_input_data()
     run_tasks = run_ecs_task.expand(arg=input_data_extractions_instance)
 
-
     input_data_extractions_instance >> run_tasks
-
 
 etl_bip_checkmate_dl_dag_instance = run_demo_ecs()
